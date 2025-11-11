@@ -20,19 +20,19 @@ provider "aws" {
 }
 
 data "hcp_packer_version" "ubuntu" {
-  bucket_name  = "terraform-packer-better-together"
+  bucket_name  = "ubuntu-hardened-images"
   channel_name = "latest"
 }
 
-data "hcp_packer_artifact" "ubuntu_europe_central_1" {
-  bucket_name         = "terraform-packer-better-together"
+data "hcp_packer_artifact" "ubuntu_us-east-1" {
+  bucket_name         = "ubuntu-hardened-images"
   platform            = "aws"
   version_fingerprint = data.hcp_packer_version.ubuntu.fingerprint
-  region              = "eu-central-1"
+  region              = "us-east-1"
 }
 
 resource "aws_instance" "app_server" {
-  ami           = data.hcp_packer_artifact.ubuntu_europe_central_1.external_identifier
+  ami           = data.hcp_packer_artifact.ubuntu_us-east-1.external_identifier
   instance_type = "t2.micro"
   tags = {
     Name = "your-terraform-with-packer-instance"
